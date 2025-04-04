@@ -9,13 +9,14 @@ namespace DrivableAPI
         internal HingeJoint hinge;
         internal Rigidbody doorRB;
         internal float forceToAdd;
+        internal Vector3 doorClosedRotation;
 
         bool usingDoor;
         bool doorClosed;
 
         private void Update()
         {
-            if (DrivableAPI.raycastHit.collider == GetComponentInChildren<Collider>())
+            if (DrivableAPI.raycastDoorHit.collider == GetComponentInChildren<Collider>())
             {
                 PlayMakerGlobals.Instance.Variables.GetFsmBool("GUIuse").Value = true;
                 if (Input.GetMouseButtonDown(0))
@@ -29,7 +30,7 @@ namespace DrivableAPI
 
                 if (!Input.GetMouseButton(0))
                 {
-                    if (Quaternion.Dot(transform.localRotation, Quaternion.Euler(0, 0, 0)) < 0.999f)
+                    if (Quaternion.Dot(transform.localRotation, Quaternion.Euler(doorClosedRotation)) < 0.999f)
                     {
                         doorClosed = false;
                     }
@@ -60,7 +61,7 @@ namespace DrivableAPI
 
                 if (Input.GetMouseButtonUp(0))
                 {
-                    if (Quaternion.Dot(transform.localRotation, Quaternion.Euler(0, 0, 0)) > 0.999f)
+                    if (Quaternion.Dot(transform.localRotation, Quaternion.Euler(doorClosedRotation)) > 0.999f)
                     {
                         JointLimits limits = hinge.limits;
                         limits.min = minAngle;

@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AckerMan.cs" />
+    <Compile Include="CrashListener.cs" />
     <Compile Include="Door.cs" />
     <Compile Include="DrivableAPI.cs" />
     <Compile Include="DrivingMode.cs" />

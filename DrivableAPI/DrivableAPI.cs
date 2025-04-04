@@ -17,7 +17,8 @@ namespace DrivableAPI
             SetupFunction(Setup.Update, Mod_Update);
         }
 
-        internal static RaycastHit raycastHit;
+        internal static RaycastHit raycastDoorHit;
+        internal static bool healthModPresent;
 
         Camera cam;
 
@@ -25,11 +26,12 @@ namespace DrivableAPI
         {
             cam = Camera.main;
             ModConsole.Log("Drivable API Loaded");
+            healthModPresent = ModLoader.IsModPresent("Health");
         }
 
         private void Mod_Update()
         {
-            Physics.Raycast(cam.transform.position, cam.transform.forward, out raycastHit, 2f);
+            Physics.Raycast(cam.transform.position, cam.transform.forward, out raycastDoorHit, 2f);
         }
 
         public static DrivingMode AddDrivingMode(GameObject carRoot, string carCustomName, Vector3 drivingModeOffset)
@@ -64,6 +66,21 @@ namespace DrivableAPI
             return drivingMode;
         }
 
+        public static CrashListener AddCrashListener(GameObject carRoot, string carCustomName)
+        {
+            if (!carRoot.GetComponent<Rigidbody>())
+            {
+                ModConsole.Log($"[Drivable API] {carRoot} does not have a rigidbody!");
+                return null;
+            }
+
+            CrashListener crashListener = carRoot.AddComponent<CrashListener>();
+            crashListener.carCustomName = carCustomName;
+            crashListener.HealthModPresent = healthModPresent;
+
+            return crashListener;
+        }
+
         public static void AddGearIndicator(GameObject carRoot, string carCustomName, bool automatic)
         {
             GearIndicator gearIndicator = carRoot.AddComponent<GearIndicator>();
@@ -78,6 +95,11 @@ namespace DrivableAPI
             steerLimiter.minSteeringAngle = minSteeringAngle;
         }
 
+        public static void AddAckerman(GameObject carRoot)
+        {
+            carRoot.AddComponent<AckerMan>();
+        }
+
         /// <summary>
         /// Adds door functionality to your door
         /// </summary>
@@ -86,7 +108,7 @@ namespace DrivableAPI
         /// <param name="maxAngle">max HingeJoint angle</param>
         /// <param name="forceToAdd">The force to apply to the door (good value is 20)</param>
         /// <returns>The door component</returns>
-        public static Door AddDoor(GameObject door, float minAngle, float maxAngle, float forceToAdd)
+        public static Door AddDoor(GameObject door, float minAngle, float maxAngle, float forceToAdd, Vector3 closedRotation)
         {
             HingeJoint hinge = door.GetComponent<HingeJoint>();
             if (hinge == null)
@@ -107,6 +129,7 @@ namespace DrivableAPI
             doorComp.maxAngle = maxAngle;
             doorComp.doorRB = door.GetComponent<Rigidbody>();
             doorComp.forceToAdd = forceToAdd;
+            doorComp.doorClosedRotation = closedRotation;
 
             return doorComp;
         }
