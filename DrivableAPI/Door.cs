@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using MSCLoader;
 
 namespace DrivableAPI
 {
@@ -16,7 +17,7 @@ namespace DrivableAPI
 
         private void Update()
         {
-            if (DrivableAPI.raycastDoorHit.collider == GetComponentInChildren<Collider>())
+            if (UnifiedRaycast.GetHit(GetComponentInChildren<Collider>()))
             {
                 PlayMakerGlobals.Instance.Variables.GetFsmBool("GUIuse").Value = true;
                 if (Input.GetMouseButtonDown(0))

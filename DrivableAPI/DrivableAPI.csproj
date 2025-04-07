@@ -83,6 +83,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y "$(TargetPath)" "H:\SteamLibrary\steamapps\common\My Summer Car\mods\"</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y "$(TargetPath)" "H:\SteamLibrary\steamapps\common\My Summer Car\mods\References\"</PostBuildEvent>
   </PropertyGroup>
 </Project>

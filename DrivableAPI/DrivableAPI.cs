@@ -3,37 +3,8 @@ using UnityEngine;
 
 namespace DrivableAPI
 {
-    public class DrivableAPI : Mod
+    public class DrivableAPI
     {
-        public override string ID => "DrivableAPI"; //Your mod ID (unique)
-        public override string Name => "DrivableAPI"; //You mod name
-        public override string Author => "0387"; //Your Username
-        public override string Version => "1.0"; //Version
-        public override string Description => ""; //Short description of your mod
-
-        public override void ModSetup()
-        {
-            SetupFunction(Setup.OnLoad, Mod_OnLoad);
-            SetupFunction(Setup.Update, Mod_Update);
-        }
-
-        internal static RaycastHit raycastDoorHit;
-        internal static bool healthModPresent;
-
-        Camera cam;
-
-        private void Mod_OnLoad()
-        {
-            cam = Camera.main;
-            ModConsole.Log("Drivable API Loaded");
-            healthModPresent = ModLoader.IsModPresent("Health");
-        }
-
-        private void Mod_Update()
-        {
-            Physics.Raycast(cam.transform.position, cam.transform.forward, out raycastDoorHit, 2f);
-        }
-
         public static DrivingMode AddDrivingMode(GameObject carRoot, string carCustomName, Vector3 drivingModeOffset)
         {
             Transform playerTrigger = carRoot.transform.Find("PlayerTrigger");
@@ -76,7 +47,6 @@ namespace DrivableAPI
 
             CrashListener crashListener = carRoot.AddComponent<CrashListener>();
             crashListener.carCustomName = carCustomName;
-            crashListener.HealthModPresent = healthModPresent;
 
             return crashListener;
         }
