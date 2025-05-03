@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using HutongGames.PlayMaker;
 
 namespace DrivableAPI
 {
@@ -7,6 +8,7 @@ namespace DrivableAPI
     {
         private Transform Player;
         public AxisCarController AxisCarController;
+        public Drivetrain drivetrain;
         public Transform PlayerPivotObject;
         public string carCustomName;
         private bool InCar;
@@ -18,9 +20,13 @@ namespace DrivableAPI
         public event EventHandler<EventArgs> OnEnterDrivingMode;
         public event EventHandler<EventArgs> OnExitDrivingMode;
 
+        private FsmBool autoClutchBool;
+
         void Start()
         {
             Player = GameObject.Find("PLAYER").transform;
+
+            autoClutchBool = GameObject.Find("Systems/Options").GetComponent<PlayMakerFSM>().FsmVariables.GetFsmBool("AutoClutch");
 
             AxisCarController.throttleAxis = "null";
             AxisCarController.brakeAxis = "null";
@@ -57,6 +63,7 @@ namespace DrivableAPI
                             AxisCarController.clutchAxis = "Clutch";
                             AxisCarController.shiftUpButton = "ShiftUp";
                             AxisCarController.shiftDownButton = "ShiftDown";
+                            drivetrain.autoClutch = autoClutchBool.Value;
                             Player.transform.localRotation = Quaternion.Euler(new Vector3(0, Player.transform.localEulerAngles.y, 0));
                             enterexitCarCooldown = 0.5f;
                             OnEnterDrivingMode?.Invoke(this, new EventArgs());

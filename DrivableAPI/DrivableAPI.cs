@@ -31,6 +31,7 @@ namespace DrivableAPI
             DrivingMode drivingMode = DriveTrigger.gameObject.AddComponent<DrivingMode>();
             drivingMode.offset = drivingModeOffset;
             drivingMode.AxisCarController = carRoot.GetComponent<AxisCarController>();
+            drivingMode.drivetrain = carRoot.GetComponent<Drivetrain>();
             drivingMode.PlayerPivotObject = DriveTrigger;
             drivingMode.carCustomName = carCustomName;
 
