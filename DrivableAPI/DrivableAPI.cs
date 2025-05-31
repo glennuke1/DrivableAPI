@@ -24,18 +24,25 @@ namespace DrivableAPI
                 return null;
             }
 
-            DriveTrigger.gameObject.layer = LayerMask.NameToLayer("PlayerOnlyColl");
+            try
+            {
+                DriveTrigger.gameObject.layer = LayerMask.NameToLayer("PlayerOnlyColl");
 
-            playerTrigger.gameObject.AddComponent<PlayerCarTrigger>();
+                playerTrigger.gameObject.AddComponent<PlayerCarTrigger>();
 
-            DrivingMode drivingMode = DriveTrigger.gameObject.AddComponent<DrivingMode>();
-            drivingMode.offset = drivingModeOffset;
-            drivingMode.AxisCarController = carRoot.GetComponent<AxisCarController>();
-            drivingMode.drivetrain = carRoot.GetComponent<Drivetrain>();
-            drivingMode.PlayerPivotObject = DriveTrigger;
-            drivingMode.carCustomName = carCustomName;
-
-            return drivingMode;
+                DrivingMode drivingMode = DriveTrigger.gameObject.AddComponent<DrivingMode>();
+                drivingMode.offset = drivingModeOffset;
+                drivingMode.AxisCarController = carRoot.GetComponent<AxisCarController>();
+                drivingMode.drivetrain = carRoot.GetComponent<Drivetrain>();
+                drivingMode.PlayerPivotObject = DriveTrigger;
+                drivingMode.carCustomName = carCustomName;
+                return drivingMode;
+            }
+            catch (System.Exception ex)
+            {
+                Debug.Log("[DrivableAPI] Exception in AddDrivingMode() report this to mod developer: " + ex.Message);
+                return null;
+            }
         }
 
         public static CrashListener AddCrashListener(GameObject carRoot, string carCustomName)
